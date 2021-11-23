@@ -6,14 +6,11 @@ on:
       - v* #version is cut
 
 env:
-  NODE_VERSION: 12
+  NODE_VERSION: 16
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: react-static-web-apps-auth
     environment:
       name: build
       url: ${{ steps.create_release.outputs.html_url }}
@@ -33,31 +30,31 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - run: |
-          npm ci
-          npm run lint
-          npm run build
-          npm pack
+          npm ci -w @aaronpowell/apollo-server-appinsights
+          npm run lint -w @aaronpowell/apollo-server-appinsights
+          npm run build -w @aaronpowell/apollo-server-appinsights
+          npm pack -w @aaronpowell/apollo-server-appinsights
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
-            name: package
-            path: "react-static-web-apps-auth/*.tgz"
+          name: package
+          path: "*.tgz"
       - run: echo "tag=${GITHUB_REF##*/v}" >> $GITHUB_ENV
       - name: Upload package to release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: 'react-static-web-apps-auth/aaronpowell-react-static-web-apps-auth-${{ env.tag }}.tgz'
-          asset_name: 'aaronpowell-react-static-web-apps-auth-${{ env.tag }}.tgz'
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: "aaronpowell-apollo-server-appinsights-${{ env.tag }}.tgz"
+          asset_name: "aaronpowell-apollo-server-appinsights-${{ env.tag }}.tgz"
           asset_content_type: application/zip
       - run: echo ${{ steps.create_release.outputs.id }} >> release.txt
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
-            name: release_id
-            path: react-static-web-apps-auth/release.txt
+          name: release_id
+          path: release.txt
 
   release:
     needs: build
@@ -68,7 +65,7 @@ jobs:
       - name: Download package
         uses: actions/download-artifact@v2
         with:
-            name: release_id
+          name: release_id
       - run: echo "release_id=$(cat release.txt)" >> $GITHUB_ENV
       - name: Publish release
         uses: actions/github-script@v3
@@ -89,7 +86,7 @@ jobs:
       - name: Download package
         uses: actions/download-artifact@v2
         with:
-            name: package
+          name: package
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ env.NODE_VERSION }}
