@@ -8,12 +8,19 @@
     },
     "devDependencies": {
         "@types/uuid": "^8.3.3",
+        "@typescript-eslint/eslint-plugin": "^5.4.0",
+        "@typescript-eslint/parser": "^5.4.0",
+        "eslint": "^8.3.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-prettier": "^4.0.0",
         "prettier": "^2.4.1",
         "typescript": "^4.5.2"
     },
     "scripts": {
         "build": "tsc",
-        "watch": "tsc -w"
+        "watch": "tsc -w",
+        "lint": "eslint src/**/*.ts",
+        "lint:fix": "npm run lint -- --fix"
     },
     "type": "module",
     "main": "./dist/index.js",
