@@ -30,6 +30,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - run: |
+          npm i -g npm@8
           npm ci -w @aaronpowell/apollo-server-appinsights
           npm run lint -w @aaronpowell/apollo-server-appinsights
           npm run build -w @aaronpowell/apollo-server-appinsights
