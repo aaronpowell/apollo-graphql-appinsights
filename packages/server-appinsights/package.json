@@ -1,0 +1,21 @@
+{
+    "name": "@aaronpowell/apollo-server-appinsights",
+    "version": "0.1.0",
+    "dependencies": {
+        "apollo-server-plugin-base": "^3.4.0",
+        "applicationinsights": "^2.1.9",
+        "uuid": "^8.3.2"
+    },
+    "devDependencies": {
+        "@types/uuid": "^8.3.3",
+        "prettier": "^2.4.1",
+        "typescript": "^4.5.2"
+    },
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc -w"
+    },
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+}
