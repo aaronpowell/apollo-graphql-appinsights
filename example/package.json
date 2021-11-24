@@ -1,6 +1,6 @@
 {
     "name": "example",
-    "version": "",
+    "version": "1.0.0",
     "scripts": {
         "build": "tsc",
         "build:production": "npm run prestart && npm prune --production",
@@ -26,6 +26,7 @@
     },
     "dependencies": {
         "@aaronpowell/apollo-server-plugin-appinsights": "*",
+        "@aaronpowell/apollo-server-logger-appinsights": "*",
         "apollo-server-azure-functions": "^3.5.0"
     }
 }

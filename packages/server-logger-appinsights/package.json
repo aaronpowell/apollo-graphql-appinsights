@@ -1,10 +1,9 @@
 {
-    "name": "@aaronpowell/apollo-server-plugin-appinsights",
+    "name": "@aaronpowell/apollo-server-logger-appinsights",
     "version": "0.1.0",
     "dependencies": {
-        "apollo-server-types": "^3.4.0",
-        "applicationinsights": "^2.1.9",
-        "uuid": "^8.3.2"
+        "apollo-server-plugin-base": "^3.4.0",
+        "applicationinsights": "^2.1.9"
     },
     "devDependencies": {
         "@types/uuid": "^8.3.3",
