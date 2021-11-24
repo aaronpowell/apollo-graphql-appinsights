@@ -1,5 +1,5 @@
 import { ApolloServer, gql } from "apollo-server-azure-functions";
-import appInsightsPlugin from "@aaronpowell/apollo-server-graphql-appinsights";
+import appInsightsPlugin from "@aaronpowell/apollo-server-plugin-appinsights";
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`

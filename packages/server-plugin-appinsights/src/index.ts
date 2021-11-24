@@ -2,12 +2,14 @@ import {
   ApolloServerPlugin,
   GraphQLSchemaContext,
   GraphQLServerListener,
-  GraphQLServiceContext,
 } from "apollo-server-plugin-base";
 import { TelemetryClient } from "applicationinsights";
 import { v4 as uuid } from "uuid";
 
-export default function (input: string | TelemetryClient): ApolloServerPlugin {
+export default function (
+  input: string | TelemetryClient,
+  logName?: string
+): ApolloServerPlugin {
   let client: TelemetryClient;
   if (typeof input === "string") {
     client = new TelemetryClient(input);
@@ -16,9 +18,7 @@ export default function (input: string | TelemetryClient): ApolloServerPlugin {
   }
 
   return {
-    async serverWillStart(
-      service: GraphQLServiceContext
-    ): Promise<GraphQLServerListener> {
+    async serverWillStart(service): Promise<GraphQLServerListener> {
       const requestId = uuid();
       client.trackEvent({
         name: "serviceWillStart",
@@ -27,6 +27,8 @@ export default function (input: string | TelemetryClient): ApolloServerPlugin {
           apolloConfig: service.apollo,
           schema: service.schema,
           requestId,
+          logName,
+          serverlessFramework: service.serverlessFramework,
         },
       });
 
@@ -35,7 +37,7 @@ export default function (input: string | TelemetryClient): ApolloServerPlugin {
           client.trackEvent({
             name: "drainServer",
             time: new Date(),
-            properties: { requestId },
+            properties: { requestId, logName },
           });
         },
         schemaDidLoadOrUpdate(schemaContext: GraphQLSchemaContext) {
@@ -44,6 +46,7 @@ export default function (input: string | TelemetryClient): ApolloServerPlugin {
             properties: {
               schema: schemaContext.apiSchema.toString(),
               requestId,
+              logName,
             },
             time: new Date(),
           });
@@ -52,13 +55,19 @@ export default function (input: string | TelemetryClient): ApolloServerPlugin {
           client.trackEvent({
             name: "serverWillStop",
             time: new Date(),
-            properties: { requestId },
+            properties: { requestId, logName },
           });
         },
       });
     },
     requestDidStart(context) {
       const requestId = uuid();
+      const headers: { [key: string]: string | null } = {};
+      if (context.request.http?.headers) {
+        for (const [key, value] of context.request.http.headers) {
+          headers[key] = value;
+        }
+      }
       client.trackEvent({
         name: "requestDidStart",
         time: new Date(),
@@ -66,6 +75,11 @@ export default function (input: string | TelemetryClient): ApolloServerPlugin {
           requestId,
           metrics: context.metrics,
           request: context.request,
+          headers,
+          isDebug: context.debug,
+          operationName: context.operationName,
+          operation: context.operation,
+          logName,
         },
       });
 
@@ -76,6 +90,7 @@ export default function (input: string | TelemetryClient): ApolloServerPlugin {
               exception: new Error(error),
               properties: {
                 requestId,
+                logName,
               },
             });
           }
@@ -88,6 +103,7 @@ export default function (input: string | TelemetryClient): ApolloServerPlugin {
               requestId,
               operationName: requestContext.operationName,
               operation: requestContext.operation,
+              logName,
             },
           });
           return Promise.resolve();
@@ -100,6 +116,7 @@ export default function (input: string | TelemetryClient): ApolloServerPlugin {
               source: requestContext.source,
               queryHash: requestContext.queryHash,
               metrics: requestContext.metrics,
+              logName,
             },
           });
           return Promise.resolve();
@@ -112,6 +129,7 @@ export default function (input: string | TelemetryClient): ApolloServerPlugin {
               source: requestContext.source,
               queryHash: requestContext.queryHash,
               metrics: requestContext.metrics,
+              logName,
             },
           });
           return Promise.resolve();
@@ -124,6 +142,7 @@ export default function (input: string | TelemetryClient): ApolloServerPlugin {
               source: requestContext.source,
               queryHash: requestContext.queryHash,
               metrics: requestContext.metrics,
+              logName,
             },
           });
           return Promise.resolve();

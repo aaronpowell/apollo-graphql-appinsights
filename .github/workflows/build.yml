@@ -38,10 +38,10 @@ jobs:
           node-version: 16.x
 
       - run: npm i -g npm@8
-      - run: npm ci -w @aaronpowell/apollo-server-appinsights
-      - run: npm run build -w @aaronpowell/apollo-server-appinsights
-      - run: npm version prerelease --preid=ci-$GITHUB_RUN_ID --no-git-tag-version -w @aaronpowell/apollo-server-appinsights
-      - run: npm pack -w @aaronpowell/apollo-server-appinsights
+      - run: npm ci -w @aaronpowell/apollo-server-plugin-appinsights
+      - run: npm run build -w @aaronpowell/apollo-server-plugin-appinsights
+      - run: npm version prerelease --preid=ci-$GITHUB_RUN_ID --no-git-tag-version -w @aaronpowell/apollo-server-plugin-appinsights
+      - run: npm pack -w @aaronpowell/apollo-server-plugin-appinsights
       - name: Upload
         uses: actions/upload-artifact@v2
         with:

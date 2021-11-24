@@ -1,5 +1,5 @@
 {
-    "name": "@aaronpowell/apollo-server-appinsights",
+    "name": "@aaronpowell/apollo-server-plugin-appinsights",
     "version": "0.1.0",
     "dependencies": {
         "apollo-server-plugin-base": "^3.4.0",
