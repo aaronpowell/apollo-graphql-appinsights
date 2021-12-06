@@ -1,6 +1,6 @@
 {
     "name": "@aaronpowell/apollo-server-plugin-appinsights",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "dependencies": {
         "apollo-server-types": "^3.4.0",
         "applicationinsights": "^2.1.9",
@@ -24,5 +24,27 @@
     },
     "type": "module",
     "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
+    "types": "./dist/index.d.ts",
+    "author": {
+        "email": "me+github@aaron-powell.com",
+        "name": "Aaron Powell",
+        "url": "https://www.aaron-powell.com"
+    },
+    "license": "https://github.com/aaronpowell/apollo-graphql-appinsights/blob/main/LICENSE",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/aaronpowell/apollo-graphql-appinsights"
+    },
+    "keywords": [
+        "graphql",
+        "monitoring",
+        "azure",
+        "apollo-server"
+    ],
+    "description": "Integration for Apollo Server monitoring plugin module with Azure Application Insights",
+    "bugs": {
+        "url": "https://github.com/aaronpowell/apollo-graphql-appinsights/issues"
+    },
+    "homepage": "https://github.com/aaronpowell/apollo-graphql-appinsights/blob/main/packages/server-plugin-appinsights",
+    "readme": "https://github.com/aaronpowell/apollo-graphql-appinsights/blob/main/packages/server-plugin-appinsights/README"
 }
