@@ -60,7 +60,7 @@ export default function (
         },
       });
     },
-    requestDidStart(context) {
+    async requestDidStart(context) {
       const requestId = uuid();
       const headers: { [key: string]: string | null } = {};
       if (context.request.http?.headers) {
@@ -77,14 +77,14 @@ export default function (
           request: context.request,
           headers,
           isDebug: context.debug,
-          operationName: context.operationName,
+          operationName: context.operationName || context.request.operationName,
           operation: context.operation,
           logName,
         },
       });
 
-      return Promise.resolve({
-        didEncounterErrors(requestContext) {
+      return {
+        async didEncounterErrors(requestContext) {
           for (const error in requestContext.errors) {
             client.trackException({
               exception: new Error(error),
@@ -94,9 +94,8 @@ export default function (
               },
             });
           }
-          return Promise.resolve();
         },
-        didResolveOperation(requestContext) {
+        async didResolveOperation(requestContext) {
           client.trackEvent({
             name: "didResolveOperation",
             properties: {
@@ -106,9 +105,8 @@ export default function (
               logName,
             },
           });
-          return Promise.resolve();
         },
-        didResolveSource(requestContext) {
+        async didResolveSource(requestContext) {
           client.trackEvent({
             name: "didResolveSource",
             properties: {
@@ -119,9 +117,8 @@ export default function (
               logName,
             },
           });
-          return Promise.resolve();
         },
-        parsingDidStart(requestContext) {
+        async parsingDidStart(requestContext) {
           client.trackEvent({
             name: "parsingDidStart",
             properties: {
@@ -132,9 +129,8 @@ export default function (
               logName,
             },
           });
-          return Promise.resolve();
         },
-        validationDidStart(requestContext) {
+        async validationDidStart(requestContext) {
           client.trackEvent({
             name: "validationDidStart",
             properties: {
@@ -145,9 +141,86 @@ export default function (
               logName,
             },
           });
-          return Promise.resolve();
         },
-      });
+        async executionDidStart(requestContext) {
+          const executionId = uuid();
+          client.trackEvent({
+            name: "executionDidStart",
+            properties: {
+              requestId,
+              executionId,
+              source: requestContext.source,
+              queryHash: requestContext.queryHash,
+              metrics: requestContext.metrics,
+              doc: requestContext.document,
+              logName,
+            },
+          });
+
+          return {
+            async executionDidEnd(error) {
+              client.trackEvent({
+                name: "executionDidEnd",
+                properties: {
+                  requestId,
+                  executionId,
+                  error,
+                  logName,
+                },
+              });
+            },
+            willResolveField(fieldResolverParams) {
+              client.trackEvent({
+                name: "willResolveField",
+                properties: {
+                  requestId,
+                  executionId,
+                  source: fieldResolverParams.source,
+                  args: fieldResolverParams.args,
+                  logName,
+                },
+              });
+
+              return async (error, result) => {
+                client.trackEvent({
+                  name: "willResolveFieldCallback",
+                  properties: {
+                    requestId,
+                    executionId,
+                    error,
+                    result,
+                    logName,
+                  },
+                });
+              };
+            },
+          };
+        },
+        async responseForOperation(requestContext) {
+          client.trackEvent({
+            name: "responseForOperation",
+            properties: {
+              requestId,
+              source: requestContext.source,
+              queryHash: requestContext.queryHash,
+              metrics: requestContext.metrics,
+              logName,
+            },
+          });
+          return null;
+        },
+        async willSendResponse({ response, metrics }) {
+          client.trackEvent({
+            name: "willSendResponse",
+            properties: {
+              requestId,
+              response,
+              metrics,
+              logName,
+            },
+          });
+        },
+      };
     },
   };
 }
