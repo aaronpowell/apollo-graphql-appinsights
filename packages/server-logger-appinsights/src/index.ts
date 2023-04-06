@@ -1,4 +1,4 @@
-import { Logger } from "apollo-server-types";
+import { Logger } from "@apollo/utils.logger";
 import { TelemetryClient } from "applicationinsights";
 
 export default function (
