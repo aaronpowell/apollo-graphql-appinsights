@@ -2,7 +2,7 @@ import {
   ApolloServerPlugin,
   GraphQLSchemaContext,
   GraphQLServerListener,
-} from "apollo-server-plugin-base";
+} from "@apollo/server";
 import { TelemetryClient } from "applicationinsights";
 import { v4 as uuid } from "uuid";
 
@@ -28,7 +28,7 @@ export default function (
           schema: service.schema,
           requestId,
           logName,
-          serverlessFramework: service.serverlessFramework,
+          startedInBackground: service.startedInBackground,
         },
       });
 
@@ -76,7 +76,6 @@ export default function (
           metrics: context.metrics,
           request: context.request,
           headers,
-          isDebug: context.debug,
           operationName: context.operationName || context.request.operationName,
           operation: context.operation,
           logName,

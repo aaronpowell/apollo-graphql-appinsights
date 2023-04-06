@@ -1,5 +1,7 @@
 # Azure AppInsights plugin for Apollo Server
 
+NOTE: This version of the package is for Apollo Server v4 - use an older version for Apollo Server v3.
+
 This package provides integration with [Application Insights](https://docs.microsoft.com/azure/azure-monitor/app/app-insights-overview?WT.mc_id=javascript-7129-aapowell) (part of Azure Monitor) for metrics gathering within Apollo Server.
 
 ## Usage
