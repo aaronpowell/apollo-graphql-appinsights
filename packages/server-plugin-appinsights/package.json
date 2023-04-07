@@ -1,6 +1,6 @@
 {
     "name": "@aaronpowell/apollo-server-plugin-appinsights",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "dependencies": {
         "@apollo/server": "^4.6.0",
         "applicationinsights": "^2.5.1",

@@ -1,6 +1,6 @@
 {
     "name": "@aaronpowell/apollo-server-logger-appinsights",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "dependencies": {
         "@apollo/utils.logger": "^2.0.1",
         "applicationinsights": "^2.5.1"
